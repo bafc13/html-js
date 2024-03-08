@@ -1,0 +1,108 @@
+<html>
+<body>
+  <canvas width="800" height="800" id="canvas" style= "border: 1px solid gray"></canvas>
+  <script>
+    var canvas = document.getElementById('canvas');
+    var c = canvas.getContext('2d');
+    c.fillStyle = '#ccddff';
+    xa= 0, ya = 0;
+    radius = 100;
+    let it = 0;
+    dAngle = 0.002;
+    // c.font() = '10px mono';
+    // c.fillText('axis X', 390, 0);
+    // c.fillText('axis Y', 0, 390);
+    function drawCircle(){
+    c.moveTo(xa,ya);
+    c.arc(xa, ya, radius, 0, 2*Math.PI, false); //main circle
+    c.moveTo(0,radius);
+    c.arc(0,radius, 4, 0, 2*Math.PI, false);
+    }
+    function drawX0Y(){
+      c.moveTo(-400, 0); //axis x
+      c.lineTo(400,0);
+      c.moveTo(0, -400); //axis y
+      c.lineTo(0,400);
+    }
+    function drawBoundaryLines(){
+      c.moveTo(-400,-radius);
+      c.lineTo(400,-radius); //upper line
+      c.moveTo(-400,radius); //lower line
+      c.lineTo(400,radius);
+      c.moveTo(400,0);
+    }
+    c.beginPath();
+    c.translate(400,400);
+    drawCircle();
+    drawX0Y();
+    drawBoundaryLines();
+    var verzAngle = -(Math.PI/2);
+    c.closePath();
+    c.fill();
+    c.strokeStyle = 'rgb(120,128,0)';
+    c.lineWidth = 3;
+    c.stroke();
+    requestAnimationFrame(drawLines);
+
+    function drawLines(timestamp){
+      it +=1;
+      verzAngle += Math.PI * dAngle;
+      c.save();
+      c.clearRect(-400,-400,1600,1600);
+      var arg1 = radius * 2 * Math.tan(verzAngle); //axis x
+      var arg2 = radius * 2 * Math.cos(verzAngle) * Math.cos(verzAngle); // axis y
+
+      // c.moveTo(0,0);
+      // c.fill();
+      c.strokeStyle = 'rgb(50,210,100)';
+      c.lineWidth = 2;
+      c.stroke();
+      c.beginPath();
+      if(arg1 <= 800 && arg2 <= 800 ){
+        // c.moveTo(400,400);
+        // c.clearRect(-400,-400,1600,1600);
+        for(i = 0; i < it; i++){ //    var verzAngle = -(Math.PI/2);
+          var prevAngle = -(Math.PI/2) + Math.PI * dAngle * i;
+          var arg3 = radius * 2 * Math.tan(prevAngle); //axis x
+          var arg4 = radius * 2 * Math.cos(prevAngle) * Math.cos(prevAngle); // axis y
+              //у нас всё грустно
+          c.lineTo(-arg3, radius-arg4);
+
+        }
+        c.lineTo(-arg1, radius - arg2);
+        // c.moveTo(arg1,arg2);
+        // c.moveTo(radius,0);
+        drawX0Y();
+        // c.moveTo(0,0);
+        drawCircle();
+        // c.moveTo(0,0);
+        drawBoundaryLines();
+
+        if(verzAngle <= 0){
+          c.moveTo(0,radius);
+          c.lineTo(-arg1,-radius);
+          c.lineTo(-arg1,radius - arg2);
+          c.lineTo(-radius*Math.sin(2*verzAngle),radius - arg2);
+          c.stroke;
+          c.strokeStyle = "rgb(50,150,100)";
+          c.fill;
+          // c.lineTo(0,radius);
+        }
+      }
+      if(verzAngle >= (Math.PI/2)){
+        verzAngle = -(Math.PI/2);
+        prevAngle = -(Math.PI/2);
+        circleAngle = 0;
+        it = 0;
+
+      }
+
+      requestAnimationFrame(drawLines);
+      c.closePath();
+      // c.clearRect(-400,-400,400,400);
+    }
+    //x = a * tg(angle)
+    //y = a * cos^2(angle)
+  </script>
+</body>
+</html>
