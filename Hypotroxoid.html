@@ -15,8 +15,8 @@
           // c.moveTo(0,0);
           c.arc(0,0,R,0,2*Math.PI, false);//main circle
           if(it > 0){
-            c.moveTo(R-r,0);
-            c.arc(R-r,0,r,0,2*Math.PI, false);
+            // c.moveTo(R-r,0);
+            // c.arc(R-r,0,r,0,2*Math.PI, false);
           }
           //inside circle
           // c.moveTo(R-r,0);
@@ -44,8 +44,12 @@
           //(x-(R-r)cos(spinAngle))^2+(y-(R-r)sin(spinAngle))^2=r^2
           //(rcos(spinAngle)-(R-r)cos(spinAngle))^2+(rsin(spinAngle)-(R-r)sin(spinAngle))^2=r^2
           //arg
-          var argTempX = (((r*Math.cos(spinAngle) - (R-r)*Math.cos(spinAngle))**2));
-          var argTempY = (((r*Math.sin(spinAngle) - (R-r)*Math.sin(spinAngle))**2));
+          // var argTempX = (((r*Math.cos(spinAngle) - (R-r)*Math.cos(spinAngle))**2));
+          // var argTempY = (((r*Math.sin(spinAngle) - (R-r)*Math.sin(spinAngle))**2));
+          // var argTempX = R(spinAngle - Math.sin(spinAngle));
+          // var argTempY = R(1 - Math.cos(spinAngle));
+          var argTempX = (1/(R-r+d))*((R-r)*Math.cos(tempAngle))+(h*Math.cos(((R-r)/r)*tempAngle));
+          var argTempY = (1/(R-r+d))*((R-r)*Math.sin(tempAngle))-(h*Math.sin(((R-r)/r)*tempAngle));
           c.arc(argTempX, argTempY, r, 0, 2*Math.PI, false);
           // c.closePath();
         }
@@ -61,13 +65,14 @@
          c.lineWidth = 2;
          c.stroke();
          c.beginPath();
-         drawMovingParts(spinAngle);
+         // drawMovingParts(spinAngle);
          drawCircles();
          for(i = 0; i < it; ++i){
            var tempAngle = Math.PI * 0.02 * i;
            var tempX = ((R-r)*Math.cos(tempAngle))+(h*Math.cos(((R-r)/r)*tempAngle));
            var tempY = ((R-r)*Math.sin(tempAngle))-(h*Math.sin(((R-r)/r)*tempAngle));
            c.lineTo(tempX, -tempY);
+           drawMovingParts(tempAngle);
          }
          c.moveTo(R-r,0);
          c.lineto(R-r+h,0);
