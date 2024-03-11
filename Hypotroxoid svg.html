@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content ="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src ="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.5.1/snap.svg-min.js"></script>
+    <title>SVG Animation</title>
+    <style>
+    </style>
+</head>
+
+<body>
+<svg id="figure" width="1000" height="1000" viewBox="0 0 1000 1000"></svg>
+<script>
+   s = Snap('#figure');
+   let begX = 400;
+   let begY = 400;
+   let rBig = 100;
+   let rSmall = 40;
+   let h = 150;
+   let betta = 0;
+   let dR = rBig-rSmall;
+   s.circle(begX, begY, rBig).attr({stroke:"green",fill:"none"});
+   c = s.circle(dR + begX, begY, rSmall);
+   c.attr({stroke:"blue",fill:"none"});
+   let i = 0;
+   let it = 0;
+   let timerId;
+   function draw() {
+     ++it;
+     c.attr({cx:dR*Math.cos(i)+begX,cy:dR*Math.sin(i)+begY});
+     i += Math.PI*2/180;
+     for(j = 0; j < it; ++j){
+       var tempAngle = Math.PI * 2 / 180 * j;
+       var tempX = ((dR)*Math.cos(tempAngle))+(h*Math.cos(((dR)/r)*tempAngle));
+       var tempY = ((dR)*Math.sin(tempAngle))-(h*Math.sin(((dR)/r)*tempAngle));
+       var l1 = paper.line(dR*Math.cos(tempAngle)+begX, dR*Math.sin(tempAngle)+begY,
+       ((dR)*Math.cos(tempAngle))+(h*Math.cos(((dR)/r)*tempAngle))+begX, ((dR)*Math.sin(tempAngle))-(h*Math.sin(((dR)/r)*tempAngle))+begY);
+       l1.attr({stroke: "dark", fill: "none"});
+     }
+
+     if (i > 4*Math.PI) {
+       clearInterval(timerId);
+     }
+   }
+   timerId = setInterval(draw, 50);
+</script>
+</body>
+</html>
