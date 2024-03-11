@@ -15,17 +15,13 @@
           // c.moveTo(0,0);
           c.arc(0,0,R,0,2*Math.PI, false);//main circle
           if(it > 0){
-            // c.moveTo(R-r,0);
-            // c.arc(R-r,0,r,0,2*Math.PI, false);
+            c.moveTo(R-r+h,0);
           }
-          //inside circle
-          // c.moveTo(R-r,0);
-          // c.moveTo(R-r,0);
         }
 
         var spinAngle = 0; //angle of parameter
         var it = 0; //iterations count
-        var R = 100, r = 0.65 * R, h = 35;
+        var R = 120, r = 0.6 * R, h = R* 0.85;
         c.beginPath();
         c.translate(400,400);
         drawCircles();
@@ -36,53 +32,41 @@
         c.stroke();
         requestAnimationFrame(drawEverything);
 
-        function drawMovingParts(spinAngle){
-          // c.arc(R*Math.cos(spinAngle),R*Math.sin(spinAngle),R,0,2*Math.PI, false);
-          // c.moveTo(R*Math.cos(spinAngle)-r,R*Math.sin(spinAngle));
-          // c.moveTo((r*Math.cos(tempAngle)), r*Math.sin(tempAngle));
-          // c.beginPath();
-          //(x-(R-r)cos(spinAngle))^2+(y-(R-r)sin(spinAngle))^2=r^2
-          //(rcos(spinAngle)-(R-r)cos(spinAngle))^2+(rsin(spinAngle)-(R-r)sin(spinAngle))^2=r^2
-          //arg
-          // var argTempX = (((r*Math.cos(spinAngle) - (R-r)*Math.cos(spinAngle))**2));
-          // var argTempY = (((r*Math.sin(spinAngle) - (R-r)*Math.sin(spinAngle))**2));
-          // var argTempX = R(spinAngle - Math.sin(spinAngle));
-          // var argTempY = R(1 - Math.cos(spinAngle));
-          var argTempX = (1/(R-r+d))*((R-r)*Math.cos(tempAngle))+(h*Math.cos(((R-r)/r)*tempAngle));
-          var argTempY = (1/(R-r+d))*((R-r)*Math.sin(tempAngle))-(h*Math.sin(((R-r)/r)*tempAngle));
-          c.arc(argTempX, argTempY, r, 0, 2*Math.PI, false);
-          // c.closePath();
+        function drawMovingParts(spinAngle,argX,argY){
+          var argTempX = (R-r)*Math.cos(spinAngle);
+          var argTempY = (R-r)*Math.sin(spinAngle);
+          c.moveTo(argTempX+r,-argTempY);
+          c.arc(argTempX, -argTempY, r, 0, 2*Math.PI, false);
+          c.moveTo(argTempX,-argTempY);
+          c.lineTo(argX,-argY);
         }
        function drawEverything(timestamp){
          it+=1;
-         spinAngle += Math.Pi * 0.02;
+         spinAngle += Math.PI * 0.02;
          c.save();
          c.clearRect(-400,-400,1600,1600);
          var argX = ((R-r)*Math.cos(spinAngle))+(h*Math.cos(((R-r)/r)*spinAngle));
          var argY = ((R-r)*Math.sin(spinAngle))-(h*Math.sin(((R-r)/r)*spinAngle));
-
          c.strokeStyle = '#E75480';
          c.lineWidth = 2;
-         c.stroke();
          c.beginPath();
-         // drawMovingParts(spinAngle);
          drawCircles();
+         // c.moveTo(argX,-argY);
          for(i = 0; i < it; ++i){
            var tempAngle = Math.PI * 0.02 * i;
            var tempX = ((R-r)*Math.cos(tempAngle))+(h*Math.cos(((R-r)/r)*tempAngle));
            var tempY = ((R-r)*Math.sin(tempAngle))-(h*Math.sin(((R-r)/r)*tempAngle));
            c.lineTo(tempX, -tempY);
-           drawMovingParts(tempAngle);
          }
-         c.moveTo(R-r,0);
-         c.lineto(R-r+h,0);
+         drawMovingParts(spinAngle, argX,argY);
          c.lineTo(argX,-argY);
-         if(spinAngle >= 4*Math.PI){
-           spinAngle = 0;
-           tempAngle = 0;
-         }
+         // if(spinAngle >= 4*Math.PI){
+         //   spinAngle = 0;
+         // }
+
          requestAnimationFrame(drawEverything);
          c.closePath();
+         c.stroke();
        }
       </script>
     </body>
