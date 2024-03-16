@@ -1,51 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content ="width=device-width,initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src ="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.5.1/snap.svg-min.js"></script>
-    <title>SVG Animation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <script src="https://cdn.jsdelivr.net/snap.svg/0.5.1/snap.svg-min.js"></script>
     <style>
+        svg {
+            width: 750px;
+            height: 750px;
+        }
     </style>
 </head>
-
 <body>
-<svg id="figure" width="1000" height="1000" viewBox="0 0 1000 1000"></svg>
-<script>
-   s = Snap('#figure');
-   let begX = 400;
-   let begY = 400;
-   let rBig = 100;
-   let rSmall = 40;
-   let h = 150;
-   let betta = 0;
-   let dR = rBig-rSmall;
-   s.circle(begX, begY, rBig).attr({stroke:"green",fill:"none"});
-   c = s.circle(dR + begX, begY, rSmall);
-   c.attr({stroke:"blue",fill:"none"});
-   let i = 0;
-   let it = 0;
-   let timerId;
-   function draw() {
-     ++it;
-     c.attr({cx:dR*Math.cos(i)+begX,cy:dR*Math.sin(i)+begY});
-     i += Math.PI*2/180;
-     for(j = 0; j < it; ++j){
-       var tempAngle = Math.PI * 2 / 180 * j;
-       var tempX = ((dR)*Math.cos(tempAngle))+(h*Math.cos(((dR)/r)*tempAngle));
-       var tempY = ((dR)*Math.sin(tempAngle))-(h*Math.sin(((dR)/r)*tempAngle));
-       var l1 = paper.line(dR*Math.cos(tempAngle)+begX, dR*Math.sin(tempAngle)+begY,
-       ((dR)*Math.cos(tempAngle))+(h*Math.cos(((dR)/r)*tempAngle))+begX, ((dR)*Math.sin(tempAngle))-(h*Math.sin(((dR)/r)*tempAngle))+begY);
-       l1.attr({stroke: "dark", fill: "none"});
-     }
+    <svg id="hypotrochoid" viewBox="-500 -500 500 500"></svg>
 
-     if (i > 4*Math.PI) {
-       clearInterval(timerId);
-     }
-   }
-   timerId = setInterval(draw, 50);
-</script>
+    <script>
+        var s = Snap("#hypotrochoid");
+        var R = 100;
+        var r = 50;
+        var d = 50;
+        var a = 0;
+        // let pathString = '';
+        // let path = s.path(pathString).attr({
+                    // fill: 'none',
+                    // stroke: '#ff0000',
+                    // strokeWidth: 2
+                // });
+        function updatePath() {
+            var x = (R - r) * Math.cos(a) + d * Math.cos(((R-r)/r) * a);
+            var y = (R - r) * Math.sin(a) - d * Math.sin(((R-r)/r) * a);
+
+            // pathString = 'M ' + x + ' ' + y;
+
+            // <path d=pathString
+            //   style = "fill:none
+            //           stroke: #ff0000
+            //           strokeWidth: 2"/>
+
+            s.path('M' + x + ' ' + y).attr({
+              style = "fill: none
+                      stroke: #ff0000
+                      strokeWidth: 2"
+            });
+            // path.attr({
+                // d: pathString
+            // });
+
+            a += 0.003*Math.PI;
+            if (a < 360) {
+                requestAnimationFrame(updatePath);
+            }
+        };
+
+        requestAnimationFrame(updatePath);
+    </script>
 </body>
 </html>
