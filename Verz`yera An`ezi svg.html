@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verz`yera An`ezi with Snap.svg</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.5.1/snap.svg-min.js"></script>
+<style>
+    svg {
+        width: 100%;
+        height: 100vh;
+        background-color: #f0f0f0;
+    }
+</style>
+</head>
+<body>
+
+<svg id="svg"></svg>
+
+<script>
+    var s = Snap("#svg");
+
+    var center = { x: 400, y: 400 };
+    var Radius = 100;
+
+    var oxpathString = 'M' + 0 + ' ' + 400 + 'L' + 800 + ' ' + 400;
+    var oypathString = 'M' + 400 + ' ' + 0 + 'L' + 400 + ' ' + 800;
+    var ox = s.path(oxpathString).attr({
+      fill: "none",
+      stroke: "dark",
+      strokeWidth: 3
+    });
+    var oy = s.path(oypathString).attr({
+      fill: "none",
+      stroke: "dark",
+      strokeWidth: 3
+    });
+    var circle = s.circle(400,400,Radius).attr({
+      fill: "none",
+      stroke: "dark",
+      strokeWidth: 2
+    });
+
+
+    function animateVerz() {
+        var angle = -(Math.PI/2);
+        var increment = 0.002;
+
+        Snap.animate(-(Math.PI/2), Math.PI/2, function(val) {
+          var arg1 = center.x + (Radius * 2 * Math.tan(angle + val));
+          var arg2 = center.y + (Radius * 2 * Math.cos(angle + val) * Math.cos(angle + val));
+          var Verz = s.line(arg1, -arg2, arg1 + 0.02, -arg2 - 0.02).attr({
+            fill: "none",
+            stroke: "green",
+            strokeWidth: 1
+          });
+
+
+          //   smallCircle.attr({
+          //       cx: center.x + ((bigRadius - smallRadius) * Math.cos(Snap.rad(angle + val))),
+          //       cy: center.y + ((bigRadius - smallRadius) * Math.sin(Snap.rad(angle + val)))
+          //   });
+          //
+          //   let argX = center.x + ((bigRadius-smallRadius)*Math.cos(Snap.rad(angle + val)))+(distance*Math.cos(Snap.rad(((bigRadius-smallRadius)/smallRadius)*(angle + val))));
+          //   let argY = center.y + ((bigRadius-smallRadius)*Math.sin(Snap.rad(angle + val)))-(distance*Math.sin(Snap.rad(((bigRadius-smallRadius)/smallRadius)*(angle + val))));
+          //   let pathString = 'M' + argX + ' ' + argY + 'L' + (argX + 0.5) + ' ' + (argY + 0.5); // пример координат для линии
+          //   let path = s.path(pathString);
+          //   path.attr({
+          //     fill: 'none',
+          //     stroke: '#123456',
+          //     strokeWidth: 1
+          // });
+          // s.selectAll('line').forEach(function(element) {
+          //   element.remove();
+          // });
+          // let line = s.line(center.x + ((bigRadius - smallRadius) * Math.cos(Snap.rad(angle + val))),
+          // center.y + ((bigRadius - smallRadius) * Math.sin(Snap.rad(angle + val))),
+          // argX,
+          // argY);
+          // line.attr({
+          //   stroke: "red",
+          //   strokeWidth: 1
+          // });
+
+            angle += Math.PI * increment;
+
+        }, 60000, mina.linear, animateVerz);
+    }
+    animateVerz();
+</script>
+</body>
+</html>
