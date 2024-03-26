@@ -7,8 +7,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.5.1/snap.svg-min.js"></script>
 <style>
     svg {
-        width: 100%;
-        height: 100vh;
+        width: 800px;
+        height: 800px;
         background-color: #f0f0f0;
     }
 </style>
@@ -43,19 +43,25 @@
 
 
     function animateVerz() {
-        var angle = -(Math.PI/2);
+        var angle = 0;
         var increment = 0.002;
 
         Snap.animate(-(Math.PI/2), Math.PI/2, function(val) {
-          var arg1 = center.x + (Radius * 2 * Math.tan(angle + val));
-          var arg2 = center.y + (Radius * 2 * Math.cos(angle + val) * Math.cos(angle + val));
-          var Verz = s.line(arg1, -arg2, arg1 + 0.02, -arg2 - 0.02).attr({
+          var arg1 = center.x-(Radius * 2 * Math.tan(angle + val));
+          var arg2 = center.y-(Radius * 2 * Math.cos(angle + val) * Math.cos(angle + val))+Radius;
+          s.selectAll('line').forEach(function(element) {
+            element.remove();
+          });
+          var Verz = s.line(arg1, -Radius + 100 + arg2, arg1 , -Radius + 99 + arg2).attr({
             fill: 'none',
             stroke: 'red',
+            strokeWidth: 2
+          });
+          var line = s.line(center.x,center.y + Radius,arg1, -Radius + 100 + arg2).attr({
+            fill: 'none',
+            stroke: 'green',
             strokeWidth: 1
           });
-
-
           //   smallCircle.attr({
           //       cx: center.x + ((bigRadius - smallRadius) * Math.cos(Snap.rad(angle + val))),
           //       cy: center.y + ((bigRadius - smallRadius) * Math.sin(Snap.rad(angle + val)))
@@ -82,6 +88,9 @@
           //   strokeWidth: 1
           // });
             angle += Math.PI * increment;
+            if(angle >= Math.PI/2){
+              angle = -(Math.PI/2);
+            }
         }, 60000, mina.linear, animateVerz);
     }
     animateVerz();
