@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>3D Model</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+
+  <script type="module">
+  import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/0.164.0/three.module.min.js';
+  import "./ThreeCSG.js";
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  const geometry = new THREE.CylinderGeometry( 10, 10, 20, 32 );
+  const material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+  const cylinder1 = new THREE.Mesh( geometry, material );
+  const cylinder2 = new THREE.Mesh( geometry, material );
+  cylinder2.rotation.x = Math.PI / 2; // rotate the second cylinder
+
+  const subtractedGeo = new ThreeBSP(cylinder1.geometry).subtract(new ThreeBSP(cylinder2.geometry));
+  const result = subtractedGeo.toMesh(new THREE.MeshLambertMaterial({color: 0x00ff00}));
+  scene.add(result);
+
+  camera.position.z = 30;
+
+  const animate = function () {
+      requestAnimationFrame(animate);
+
+      renderer.render(scene, camera);
+  };
+
+  animate();
+    </script>
+  </body>
+  </html>

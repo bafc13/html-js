@@ -8,23 +8,26 @@
     </style>
 </head>
 <body>
-     <script src="ThreeCSG.js"></script>
-     <script src="three.js"></script>
-		 <script type="module">
+     <script >
+
+     </script>
+     <script src = "ThreeCSG.js"></script>
+     <script type="module">
+     import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/0.164.0/three.module.min.js';
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color( 0x050555 );
+        scene.fog = new THREE.Fog( 0x050505, 2000, 3500 );
+
         const width = window.innerWidth, height = window.innerHeight;
         const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 2000);
         camera.rotation.y = Math.PI / 2;
         camera.position.z = 0; camera.position.y = 0; camera.position.x = 5;
 
-        const scene = new THREE.Scene();
-				scene.background = new THREE.Color( 0x050555 );
-				scene.fog = new THREE.Fog( 0x050505, 2000, 3500 );
-
         scene.add( new THREE.AmbientLight( 0x111111 ) );
 
         const light1 = new THREE.DirectionalLight( 0xffffff, 0.5 );
-				light1.position.set( 1, 1, 1 );
-				scene.add( light1 );
+        light1.position.set( 1, 1, 1 );
+        scene.add( light1 );
 
         const light2 = new THREE.DirectionalLight( 0xffffff, 1.5 );
         light2.position.set( 0, - 1, 0 );
@@ -34,20 +37,20 @@
         const material = new THREE.MeshNormalMaterial();
         const mesh = new THREE.Mesh( geometry, material);
         mesh.scale.y = 0.3;
-        var Cyl1_bsp = new ThreeBSP(mesh);
+        var Cyl1bsp = new ThreeBSP(mesh);
 
         const geometry1 = new THREE.CylinderGeometry( 1, 1, 10, 32);
         const material1 = new THREE.MeshNormalMaterial();
         const mesh1 = new THREE.Mesh( geometry1, material1 );
         mesh1.scale.y = 0.3;
         mesh1.rotation.x = Math.PI / 2;
-        var Cyl2_bsp = new ThreeBSP(mesh1);
+        var Cyl2bsp = new ThreeBSP(mesh1);
 
-        var intersect_bsp = Cyl1_bsp.intersect(Cyl2_bsp);
+        var intersectbsp = Cyl1bsp.intersect(Cyl2bsp);
 
-        var result = intersect_bsp.toMesh(new THREE.MeshNormalMaterial());
-        // result.geometry.computeVertexNormals();
-        // var intersectedGeometry = THREE.MeshBoolean(mesh, mesh1, 'intersection');
+        var result = intersectbsp.toMesh( new THREE.MeshNormalMaterial());
+
+        // var intersectedGeometry = new THREE.BufferGeometry().fromGeometry( mesh1.geometry );
 
         // var intersectedMesh = new THREE.Mesh(intersectedGeometry, new THREE.MeshNormalMaterial());
 
@@ -58,12 +61,12 @@
         renderer.setAnimationLoop( animate );
         document.body.appendChild( renderer.domElement );
 
-  function animate( time ) {
-    result.rotation.x = time / 2000;
-    result.rotation.y = time / 1000;
+        function animate( time ) {
+            result.rotation.x = time / 2000;
+            result.rotation.y = time / 1000;
 
-	   renderer.render( scene, camera );
-}
+            renderer.render( scene, camera );
+        }
     </script>
   </body>
   </html>
