@@ -1,4 +1,8 @@
 'use strict';
+import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r110/three.module.js';
+
+
+
 window.ThreeBSP = (function() {
 
 	var ThreeBSP,
