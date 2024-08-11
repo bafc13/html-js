@@ -1,0 +1,57 @@
+<!DOCTYPE html><html lang="en"><head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.10.2/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.10.2/addons/p5.sound.min.js"></script>
+
+    <meta charset="utf-8">
+   
+
+
+  <base href="https://editor.p5js.org/shakhanin/present/26rUgWxRD/"><style>
+    html, body {
+      margin: 0;
+      padding: 0;
+
+    }
+    canvas {
+      display: block;
+    }
+</style></head>
+  <body>
+
+    <script>
+
+    let r=10
+    let a=0
+    let c=20
+    let angle = 0
+    let art
+
+    function setup() {
+      createCanvas(400, 400, WEBGL);
+      art = createGraphics(400,400);
+    }
+
+    function draw() {
+      background(220);
+      push()
+      let x = r+c*cos(a);
+      let y = r+c*sin(a);
+      art.fill(r,a,c);
+      art.ellipse (x+200,y+200,10,10);
+      c = c + 0.09
+      a = a + 0.8
+      pop()
+
+      push()
+      texture(art)
+      rotateX(angle),
+      rotateY(angle),
+      rotateZ(angle)
+      box(200)
+      angle = angle + 0.003
+      pop()
+    }
+</script>
+
+
+</body></html>

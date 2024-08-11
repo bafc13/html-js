@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Oloid</title>
+		<meta charset="utf-8">
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+	<body>
+		<script src="three.js"></script>
+
+		<script type="module">
+
+
+				const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 5 );
+				camera.position.z = 5;
+
+				const scene = new THREE.Scene();
+				scene.background = new THREE.Color( 0x050505 );
+				scene.fog = new THREE.Fog( 0x050505, 2000, 3500 );
+
+				scene.add( new THREE.AmbientLight( 0x444444 ) );
+
+				const light1 = new THREE.DirectionalLight( 0xffffff, 0.5 );
+				light1.position.set( 1, 1, 1 );
+				scene.add( light1 );
+
+				const light2 = new THREE.DirectionalLight( 0xffffff, 1.5 );
+				light2.position.set( 0, - 1, 0 );
+				scene.add( light2 );
+
+
+				const geometry = new THREE.BufferGeometry();
+
+				const positions = [];
+				const nPolygons = 4096;
+				const N = nPolygons/4 + 1;
+
+				for(let i = 0; i < N; i++)
+			    {
+					const s = i / (N - 1);
+					const t = (2*Math.PI/3) * ( 3*s - 2*Math.pow( s, 1.5 ) );
+
+					const ax = Math.sin(t);
+					const ay = -Math.cos(t);
+					const az = 0;
+
+					const bx = 0;
+					const by = 1/(1+Math.cos(t));
+					const bz = Math.sqrt(1+2*Math.cos(t))/(1+Math.cos(t));
+
+					positions.push( ax, ay, az );
+					positions.push( bx, by, -bz );
+
+					if( i  >  0  ){
+						positions.push( -ax, ay, az );
+					}
+					else
+					{
+						positions.push( ax, ay, az );
+					}
+
+					positions.push( bx, by, bz );
+					positions.push( -ax, ay, az );
+
+					if( i != N-1 )
+					{
+						positions.push( bx, by, -bz );
+					}
+					else
+					{
+						positions.push( bx, by, -bz );
+					}
+
+					positions.push( ax, ay, az );
+					positions.push( bx, by, bz );
+
+					if( i  >  0  ){
+						positions.push( -ax, ay, az );
+					}
+					else
+					{
+						positions.push( -ax, ay, az );
+					}
+
+					positions.push( bx, by, bz );
+					positions.push( ax, ay, az );
+
+					if( i != N-1 )
+					{
+						positions.push( bx, by, -bz );
+					}
+					else
+					{
+						positions.push( bx, by, -bz );
+					}
+
+
+				}
+
+				function disposeArray() {
+
+					this.array = null;
+
+				}
+
+				geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( positions, 3 ).onUpload( disposeArray ) );
+				const material = new THREE.MeshPhongMaterial({
+				  color: 0xFF0000,
+				  flatShading: true,
+				  side: THREE.DoubleSide,
+				  Phong: true,
+				});
+				const mesh = new THREE.Mesh( geometry, material );
+
+				scene.add(mesh);
+
+				const renderer = new THREE.WebGLRenderer();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				document.body.appendChild( renderer.domElement );
+			function animate() {
+				requestAnimationFrame( animate );
+
+				const time = Date.now() * 0.001;
+
+				mesh.rotation.y = time * 0.5;
+
+				renderer.render( scene, camera );
+			}
+			animate();
+		 </script>
+	</body>
+</html>

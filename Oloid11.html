@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.10.2/p5.js"></script>
+		<style>
+			html, body {
+			  margin: 0;
+			  padding: 0;
+			}
+			canvas {
+			  display: block;
+			}
+		</style>
+		<meta charset="UTF-8">
+		<title>OLOID</title>
+	</head>
+	<body>
+		 <script>
+		 let disqueA = [];
+			let disqueB = [];
+			let ax = 0;
+			let animePause=false;
+			let rayon = 150;
+			let resolution = 10;
+
+			function setup() {
+			  createCanvas(windowWidth, windowHeight, WEBGL);
+			  angleMode(DEGREES);
+			  makeCircle_A(rayon, resolution);
+			  makeCircle_B(rayon, resolution);
+			}
+			function draw() {
+			  background(100);
+
+			  let locX = mouseX - height / 2;
+			  let locY = mouseY - width / 2;
+			  ambientLight(60, 60, 60);
+			  pointLight(255, 255, 255, 50, 0, -200);
+			  
+			  translate(50, 0);
+
+			  rotateX(ax);
+			  drawOloide();
+			  if (!animePause) {
+				ax -= 0.4;
+			  } else {
+				drawOrtho();
+				drawCircles();
+			  }
+			}
+
+			function mousePressed() {
+			  animePause = true;
+			}
+
+			function mouseReleased() {
+			  animePause = false;
+			}
+
+			function drawOrtho() {
+			  let l = 200;
+			  stroke(100, 0, 255);
+			  line(0, 0, 0, l, 0, 0);
+			  stroke(0, 255, 100);
+			  line(0, 0, 0, 0, l, 0);
+			  stroke(255, 100, 0);
+			  line(0, 0, 0, 0, 0, l);
+			}
+
+			// On dessine les 2 arcs ouverts de 240° pour relier
+			// les pts de A à B, avec des points en double comme pour 
+			// à partir du modèle déplié on imagine reliés entre eux
+			// coller entre elles les languettes d'un patron en papier
+			/* A      B
+			 -120    60
+			  -90    120   
+				0    300
+			  +90    120
+			 +120    60
+			 mais avec autant de points pr A et pr B ! == 240/resolution
+			*/
+
+			function makeCircle_A(r) {
+			  for (let i = -120; i <= 120; i += resolution / 2) {
+				let x = r * cos(i);
+				let y = 0;
+				let z = r * sin(i);
+				disqueA.push(createVector(x, y, z));
+			  }
+			}
+
+			function makeCircle_B(r) {
+			  for (let i = -60; i > -300; i -= resolution / 2) {
+				let x = r * cos(i);
+				let y = r * sin(i);
+				let z = 0;
+				disqueB.push(createVector(x - r, y, z));
+			  }
+			}
+
+			function drawCircles() {
+			  // A est BLEU
+			  stroke(0, 120, 240);
+			  noFill();
+			  beginShape();
+			  for (let i = 0; i < disqueA.length; i++) {
+				vertex(disqueA[i].x, disqueA[i].y, disqueA[i].z);
+			  }
+			  endShape();
+			  // B est VERT
+			  stroke(0, 240, 120);
+			  beginShape();
+			  for (let i = 0; i < disqueB.length; i++) {
+				vertex(disqueB[i].x, disqueB[i].y, disqueB[i].z);
+			  }
+			  endShape();
+			}
+
+			function drawOloide() {
+			  let alph = 255;
+			  ambientMaterial(250);
+			  stroke(24,20);
+			  // Une pointe de B vers tout A : 
+			  fill(0, 255, 127, alph);
+			  beginShape(TRIANGLE_STRIP);
+			  for (let i = disqueA.length - 1, j = 0; i >= 0; i--) {
+				vertex(disqueA[i].x, disqueA[i].y, disqueA[i].z);
+				vertex(disqueB[j].x, disqueB[j].y, disqueB[j].z);
+			  }
+			  // L'autre pointe de B vers tout A : 
+			  for (let i = disqueA.length - 1, j = disqueB.length - 1; i >= 0; i--) {
+				vertex(disqueA[i].x, disqueA[i].y, disqueA[i].z);
+				vertex(disqueB[j].x, disqueB[j].y, disqueB[j].z);
+			  }
+			  endShape(CLOSE);
+			  // Une pointe de A vers tout B : 
+			  fill(0, 255, 127, alph);
+			  beginShape(TRIANGLE_STRIP);
+			  for (let i = disqueB.length - 1, j = 0; i >= 0; i--) {
+				vertex(disqueB[i].x, disqueB[i].y, disqueB[i].z);
+				vertex(disqueA[j].x, disqueA[j].y, disqueA[j].z);
+			  }
+			  // L'autre pointe de A vers tout B : 
+			  for (let i = disqueB.length - 1, j = disqueA.length - 1; i >= 0; i--) {
+				vertex(disqueB[i].x, disqueB[i].y, disqueB[i].z);
+				vertex(disqueA[j].x, disqueA[j].y, disqueA[j].z);
+			  }
+			  endShape(CLOSE);
+			  
+			}
+		 </script>
+	</body>
+</html>
